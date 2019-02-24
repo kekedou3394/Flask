@@ -25,5 +25,9 @@ def idx_view():
     return '<p>Your browser is %s</p>' % user_agent
 
 
+# 查看URL映射
+url_map = app.url_map
+print(url_map)
+
 if __name__ == '__main__':
     app.run(debug=True)  # 采用debug的方式启动
