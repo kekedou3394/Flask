@@ -2,6 +2,7 @@
 # encoding:utf-8
 
 from flask import Flask, render_template
+from ch03.my_obj import MyObj
 
 app = Flask(__name__)
 
@@ -18,6 +19,19 @@ def user(name):
     lgr = "User's name is {}".format(name)
     print(lgr)
     return render_template('user.html', name=name)
+
+
+@app.route('/sup')
+def supJinja():
+    # 字典
+    mydict = {'key': 'WY'}
+    # 列表
+    mylist = [1, 2, 3, 4]
+    myintvar = 2
+    print(mydict)
+    myobj = MyObj()
+
+    return render_template('sup.html', mydict=mydict, mylist=mylist, myintvar=myintvar, myobj=myobj)
 
 
 if __name__ == '__main__':
