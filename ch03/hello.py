@@ -2,9 +2,12 @@
 # encoding:utf-8
 
 from flask import Flask, render_template
+from flask.ext.bootstrap import Bootstrap
 from ch03.my_obj import MyObj
 
 app = Flask(__name__)
+# 20190227 初始化bootstrap
+bootstrap = Bootstrap(app)
 
 
 # app.route 修饰器
