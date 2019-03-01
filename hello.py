@@ -3,16 +3,20 @@
 
 from flask import Flask, render_template
 from flask.ext.bootstrap import Bootstrap
+from flask.ext.moment import Moment
+from datetime import datetime
 
 app = Flask(__name__)
 # 20190227 初始化bootstrap
 bootstrap = Bootstrap(app)
+# 20190302 本地化日期和时间
+moment = Moment(app)
 
 
 # app.route 修饰器
 @app.route('/')
 def index():
-    return render_template('index.html')
+    return render_template('index.html', current_time=datetime.utcnow())
 
 
 # 动态参数
