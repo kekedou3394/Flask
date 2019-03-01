@@ -3,7 +3,6 @@
 
 from flask import Flask, render_template
 from flask.ext.bootstrap import Bootstrap
-from ch03.my_obj import MyObj
 
 app = Flask(__name__)
 # 20190227 初始化bootstrap
@@ -22,19 +21,6 @@ def user(name):
     lgr = "User's name is {}".format(name)
     print(lgr)
     return render_template('user.html', name=name)
-
-
-@app.route('/sup')
-def supJinja():
-    # 字典
-    mydict = {'key': 'WY'}
-    # 列表
-    mylist = [1, 2, 3, 4]
-    myintvar = 2
-    print(mydict)
-    myobj = MyObj()
-
-    return render_template('sup.html', mydict=mydict, mylist=mylist, myintvar=myintvar, myobj=myobj)
 
 
 # 20190302 自定义错误页面
