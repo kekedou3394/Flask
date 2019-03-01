@@ -37,5 +37,16 @@ def supJinja():
     return render_template('sup.html', mydict=mydict, mylist=mylist, myintvar=myintvar, myobj=myobj)
 
 
+# 20190302 自定义错误页面
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template('404.html'), 404
+
+
+@app.errorhandler(500)
+def internal_server_error(e):
+    return render_template('500.html'), 500
+
+
 if __name__ == '__main__':
     app.run(debug=True)  # 采用debug的方式启动
