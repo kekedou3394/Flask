@@ -9,7 +9,8 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField
 from wtforms.validators import DataRequired
 from flask_sqlalchemy import SQLAlchemy
-from flask_migrate import Migrate
+from flask_migrate import Migrate, MigrateCommand
+from flask_script import Manager, Shell
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 
@@ -22,7 +23,11 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 bootstrap = Bootstrap(app)
 moment = Moment(app)
 db = SQLAlchemy(app)
+manager = Manager(app)
 migrate = Migrate(app, db)
+
+
+manager.add_command('db', MigrateCommand)
 
 
 class Role(db.Model):
@@ -50,9 +55,12 @@ class NameForm(FlaskForm):
     submit = SubmitField('Submit')
 
 
-@app.shell_context_processor
+# @app.shell_context_processor
 def make_shell_context():
-    return dict(db=db, User=User, Role=Role)
+    return dict(app=app, db=db, User=User, Role=Role)
+
+
+manager.add_command('shell', Shell(make_context=make_shell_context()))
 
 
 @app.errorhandler(404)
@@ -71,8 +79,9 @@ def index():
     if form.validate_on_submit():
         user = User.query.filter_by(username=form.name.data).first()
         if user is None:
-            user = User(username=form.name.data)
-            db.session.add(user)
+            user_role = Role(name=form.name.data)
+            user = User(username=form.name.data, role=user_role)
+            db.session.add_all([user_role, user])
             db.session.commit()
             session['known'] = False
         else:
@@ -83,5 +92,6 @@ def index():
                            known=session.get('known', False))
 
 
-# if __name__ == '__main__':
-#     app.run()
+if __name__ == '__main__':
+    app.run()
+    # manager.run()
